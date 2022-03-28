@@ -11,4 +11,4 @@ Current status:
 
 Usage:
 
-Replace any [Tabris.js playground example](/https://playground.tabris.com/#) by this script, scan the QR code with [Tabris.js app](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) 3.8.0 (beware of other versions! Use only this link, the others are old!), input credentials and click button. Swipe left to see console output, you should see your autentication cookie.
+Replace any [Tabris.js playground example](https://playground.tabris.com/#) by this script, scan the QR code with [Tabris.js app](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) 3.8.0 (beware of other versions! Use only this link, the others are old!), input credentials and click button. Swipe left to see console output, you should see your autentication cookie.
