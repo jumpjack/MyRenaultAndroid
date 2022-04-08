@@ -2,11 +2,11 @@
 Testing Renault API usage with [Tabris.js](https://tabris.com/) , to create a standalone app for Android and iOS using javascript.
 
 Current status:
- - login to Gigya server works properly, without need for proxy and without CORS errors
- - login to Kamereon server: to do
- - retrieve PersonId: to do
- - retrieve AccountId: to do
- - retrieve VIN: to do
+ - login to Gigya server **DONE** - It works properly, without need for proxy and without CORS errors
+ - login to Kamereon server: **DONE**
+ - retrieve PersonId: **DONE**
+ - retrieve AccountId: **DONE**
+ - retrieve VIN: **DONE**
  - run endpoint: to do
 
 Usage:
