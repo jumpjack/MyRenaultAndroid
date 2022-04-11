@@ -1,7 +1,0 @@
-{
-  "main": "src/app.js",
-  "dependencies": {
-    "tabris": "^3.0.0",
-    "left-pad": "^1.1.3",
-  }
-}
