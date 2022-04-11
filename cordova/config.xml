@@ -7,4 +7,5 @@
   <author email="jumpjack@libero.it" href="https://jumpjack.wordpress.com">
     Jumpjack
   </author>
+  <preference name="EnableDeveloperConsole" value="true" />
 </widget>
