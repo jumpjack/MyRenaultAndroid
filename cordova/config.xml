@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget
+  id="this.is.my.path"
+  version="0.1.0"
+  android-versionCode="$BUILD_NUMBER"
+  ios-CFBundleVersion="$BUILD_NUMBER">
+  <name>Ciao mondo!</name>
+  <description>
+    App di esempio
+  </description>
+  <author email="a@b.com">
+    Jumping Jack  Flash
+  </author>
+  <preference name="EnableDeveloperConsole" value="$IS_DEBUG" />
+  <preference name="LogFileLevel" value="0" />
+</widget>
