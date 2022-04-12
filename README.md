@@ -8,6 +8,7 @@ Current status:
  - retrieve AccountId: **DONE**
  - retrieve VIN: **DONE**
  - run endpoint: to do
+ - [compile with tabis.js](https://build.tabris.com/): to do (tried, no success as of now)
 
 Usage:
 
