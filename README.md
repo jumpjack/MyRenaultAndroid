@@ -76,3 +76,20 @@ Once this test app will be working, an "actual" app will be developed to perform
 - constant monitoring of charge level in background, stop charging at user-defined level  - to do
 - show charging sessions - to do
 
+
+
+
+# CHANGELOG
+
+- 0.2.0 Implemented dropdown list for endpoint and version selection; implemented scrolling for output
+- 0.1.1 Implemented user-specified endpoint
+- 0.1.0 First version with working endpoint (tested: cockpit)
+- 0.0.9 Added list to select vehicle
+- 0.0.8 Interface split into Main and Settings pages; experimenting with drawer (opened by left swipe)
+- 0.0.7 Introduced default params
+- 0.0.6 tests with promises
+- 0.0.5 All checks passed: successfully retrieved cookie, JWT token, personId, accountId, VIN and vehicles
+- 0.0.4 Single user+pass input, cookievalue output on interface
+- 0.0.3 Skipped
+- 0.0.2: Cleaned up interface and source; no functions added, still just logging in to Gigya server.
+- 0.0.1: First experiments
