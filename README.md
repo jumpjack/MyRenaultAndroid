@@ -7,7 +7,7 @@ Current status:
  - retrieve PersonId: **DONE**
  - retrieve AccountId: **DONE**
  - retrieve VIN: **DONE**
- - run endpoint: to do
+ - run endpoint: **DONE** (first working version: 0.1.0)
  - [compile online with tabris.js](https://build.tabris.com/): to do (tried, no success as of now)
 
 Usage:
@@ -19,3 +19,12 @@ If app works, it should end up showing your VIN.
 Swipe left to see console output for debugging purpose.
 
 NOTE: You may need to put your region-specific data in Settings page.
+
+----------
+Actual app
+
+Once this test app will be working, an "actual" app will be developed to perform these tasks:
+
+- constant monitoring of charge level in background, stop charging at user-defined level  - to do
+- show charging sessions - to do
+-
