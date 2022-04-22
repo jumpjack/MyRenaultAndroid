@@ -1,16 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget
-  id="this.is.my.path"
-  version="0.1.0"
-  android-versionCode="$BUILD_NUMBER"
-  ios-CFBundleVersion="$BUILD_NUMBER">
-  <name>Ciao mondo!</name>
+<widget id="my.first.app" version="1.0.0">
+  <name>HelloWorld</name>
   <description>
-    App di esempio
+    A sample Tabris.js application.
   </description>
-  <author email="a@b.com">
-    Jumping Jack  Flash
+  <author email="dev@tabrisjs.com" href="https://tabrisjs.com">
+    Tabris.js Team
   </author>
-  <preference name="EnableDeveloperConsole" value="$IS_DEBUG" />
-  <preference name="LogFileLevel" value="0" />
 </widget>
