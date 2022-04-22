@@ -1,9 +1,9 @@
 {
+  "title": "MyRenaultAndroid",
+  "description": "Monitor your Renault vehicle from your Android phone",
+  "category": "Small Apps",
   "main": "src/app.js",
   "dependencies": {
-    "tabris": "^3.0.0"
-  },
-    "scripts": {
-    "build:android"
+    "tabris": "^3.8.0"
   }
 }
