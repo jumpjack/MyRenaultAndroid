@@ -22,8 +22,10 @@ var vehiclesItems = [];
 var VINindex = 1;
 var myTimer = -1;
 var counter = 0;
-var checkInterval = 5; // Minutes between checks
-var loginDuration = 10;
+var checkInterval = 1; // Minutes between checks
+var loginDuration = 10; // To be implemented
+var simulatorInterval = 30; // Seconds between simulated increment of SoC (for debugging)
+var simulatedSoC = 0;
 
 const newData = {
 	"servers": {
@@ -173,7 +175,7 @@ var loginButton = new Button({
 
 
 var debugButton = new Button({
- text: "timer2",
+ text: "timer",
  alignment : "right",
  right: 0,
 }).onSelect(startTimer)
@@ -295,13 +297,22 @@ function startTimer() {
   } else {
     LOG("Fermo timer...", "");
     clearInterval(myTimer);
+
     LOG("Fermato?", "");
   }
   LOG("Fine start", "");
 }
 
 function aggiorna() {
-  console.log(counter++);
+	console.log(counter++);
+	if (counter>10) {
+		cordova.plugins.notification.local.schedule({
+		title: 'Time over',
+		text: 'Facile...',
+		foreground: true
+		});
+	}
+    clearInterval(myTimer);
 }
 
 
