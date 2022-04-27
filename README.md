@@ -10,7 +10,12 @@ Current status:
  - retrieve AccountId: **DONE**
  - retrieve VIN: **DONE**
  - run endpoint: **DONE** (first working version: 0.1.0)
- - [compile online with tabris.js](https://build.tabris.com/): to do (tried, no success as of now)
+ - [compile online with tabris.js](https://build.tabris.com/): **DONE** (first working version: 0.2.0)
+ - test running in background: **DONE**
+ - test timers: **DONE** (0.2.1)
+ - simulate SoC increase/monitoring: **to do**
+ - test notifications: **to do**
+ - 
 
 Usage:
 
