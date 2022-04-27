@@ -7,4 +7,5 @@
   <author email="jumpjack@libero.it" href="https://autoguida.wordpress.com">
     Jumpjack
   </author>
+  <plugin name="cordova-plugin-local-notifications" spec="latest" />
 </widget>
