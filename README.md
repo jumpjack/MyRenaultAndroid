@@ -14,8 +14,7 @@ Current status:
  - test running in background: **DONE**
  - test timers: **DONE** (0.2.1)
  - simulate SoC increase/monitoring: **to do**
- - test notifications: **to do**
- - 
+ - test notifications: **to do**  (cordova plugin needed?) 
 
 Usage:
 
