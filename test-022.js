@@ -12,7 +12,7 @@
 // 0.0.3 Skipped
 // 0.0.2: Cleaned up interface and source; no functions added, still just logging in to Gigya server.
 
-const {Button, TextView, contentView, Stack, TextInput, AlertDialog, NavigationView, Page, Action, drawer, Composite, CollectionView, ScrollView, Row} require('tabris');
+const {Button, TextView, contentView, Stack, TextInput, AlertDialog, NavigationView, Page, Action, drawer, Composite, CollectionView, ScrollView, Row} = require('tabris');
 const {ItemPicker, List} = require('tabris-decorators');
 
 const DEBUG_ON = true;
