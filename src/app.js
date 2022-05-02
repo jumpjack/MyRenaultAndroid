@@ -1,3 +1,6 @@
+// 0.2.4 Output working
+// 0.2.3 Working in 2.x (apart for output text)
+// 0.2.2 Playing with cordova and tabris 2.x
 // 0.2.1 Playing with timers and intervals
 // 0.2.0 Implemented dropdown list for endpoint and version selection; implemented scrolling for output
 // 0.1.1 Implemented user-specified endpoint
@@ -11,8 +14,9 @@
 // 0.0.3 Skipped
 // 0.0.2: Cleaned up interface and source; no functions added, still just logging in to Gigya server.
 
-import {Button, TextView, contentView, Stack, TextInput, AlertDialog, NavigationView, Page, Action, drawer, Composite, CollectionView, ScrollView, Row} from 'tabris';
-const {ItemPicker, List} = require('tabris-decorators');
+const {Button, TextView, contentView, Stack, TextInput, AlertDialog, NavigationView, Page, Action, drawer, Composite, CollectionView, ScrollView, Picker, ui} = require('tabris');
+
+pippo = "niente";
 
 const DEBUG_ON = true;
 
@@ -39,6 +43,17 @@ const newData = {
         }
     },
 };
+
+const VERSIONS = [
+  {id:"v1"},
+  {id:"v2"}
+];
+
+const ENDPOINTS =  [
+      {id:"cockpit"},
+      {id:"battery-status"},
+      {id:"hvac-status"}
+      ];
 
 /*
 drawer.set({enabled: true});
@@ -76,172 +91,193 @@ var globalVehicles = [];
 var headers = [{}, {}, {}, {}, {}];
 
 ///////////////////////////////////////////////////
-var myStackSettings = new Stack({
-  alignment:  'stretchX',
-  spacing: CONTROLS_SPACING,
-  padding: CONTROLS_PADDING,
-  layoutData: "stretchX"
+var myStackSettings = new Composite({
+    left: 0, top: 0
   }
 );
 
 var gigyaUrlControl = new TextInput({
   message: 'gigyaurl',
-  //width: CONTROLS_WIDTH,
-  height: CONTROLS_HEIGHT
+  height: CONTROLS_HEIGHT,
+  top: CONTROLS_HEIGHT
 }).appendTo(myStackSettings);
 
 var gigyaKeyControl = new TextInput({
   message: 'GIGA KEY',
-  height: CONTROLS_HEIGHT
+  height: CONTROLS_HEIGHT,
+  top: CONTROLS_HEIGHT*2
+
 }).appendTo(myStackSettings);
 
 var kamereonUrlControl = new TextInput({
   message: 'kamereon url',
-  height: CONTROLS_HEIGHT
+  height: CONTROLS_HEIGHT,
+  top: CONTROLS_HEIGHT * 3
+
 }).appendTo(myStackSettings);
 
 var kamereonKeyControl = new TextInput({
   message: 'KAMEREON API',
-  height: CONTROLS_HEIGHT
+  height: CONTROLS_HEIGHT,
+  top: CONTROLS_HEIGHT * 4
 }).appendTo(myStackSettings);
 
 
-var paramRow1 = new Row({
-  left : 0,
-  right: 0,
+var paramRow1 = new Composite({
+  top: CONTROLS_HEIGHT * 5
 }).appendTo(myStackSettings);
 
 var countryControl = new TextInput({
   message: 'country',
+  left:0, right:360,
   height: CONTROLS_HEIGHT
 }).appendTo(paramRow1);
 
 var VINcontrol = new TextInput({
   message: 'Selected VIN',
+  left:90,
+
   height: CONTROLS_HEIGHT
 }).appendTo(paramRow1);
 
 var checkIntervalControl = new TextInput({
   message: 'check interval (minutes)',
+  left:200, right:50,
+
   height: CONTROLS_HEIGHT
 }).appendTo(paramRow1);
 
 
 
 var loadButton = new Button({
- text: "Load parameters"
-}).onSelect(loadStoredParams)
+ text: "Load parameters",
+  top: CONTROLS_HEIGHT * 6
+}).on('select',loadStoredParams)
   .appendTo(myStackSettings);
 
 var saveButton = new Button({
- text: "Save parameters"
-}).onSelect(saveParams)
+ text: "Save parameters",
+  top: CONTROLS_HEIGHT * 7
+}).on('select',saveParams)
   .appendTo(myStackSettings);
 
 var resetButton = new Button({
- text: "Reset parameters"
-}).onSelect(resetParams)
+ text: "Reset parameters",
+  top: CONTROLS_HEIGHT * 8
+}).on('select',resetParams)
   .appendTo(myStackSettings);
 
 ////////////////////
 
-var myStack = new Stack({
-  alignment:  'stretchX',
-  spacing: CONTROLS_SPACING,
-  padding: CONTROLS_PADDING,
-  layoutData: "stretch"
+var myStack = new Composite({
   }
 );
 
 
-var userAndPass = new TextInput({
-  message: 'user,pass',
-  type: "password"
-  }).appendTo(myStack);
 
-
-  var debugRow = new Row({
+  var debugRow = new Composite({
   left : 0,
   right: 0,
+  top: CONTROLS_HEIGHT * 0,
+  left:0, right: 0
   }).appendTo(myStack);
 
-
-var loginButton = new Button({
- text: "Login",
- alignment : "left",
- left:0,
-}).onSelect(login)
-  .appendTo(debugRow);
-
-
-var debugButton = new Button({
- text: "timer",
- alignment : "right",
- right: 0,
-}).onSelect(startTimer)
-  .appendTo(debugRow);
-
-
-
-var vehiclePicker = ItemPicker({
-      textSource: 'VIN',
-      onItemSelect: handleVehicleSelection,
-      items: []
+  var userAndPass = new TextInput({
+    message: 'user,pass',
+    type: "password",
+    left:0, right: 300
     }).appendTo(myStack);
 
 
-  var myRow = new Row({
+    var loginButton = new Button({
+     text: "Login",
+     alignment : "center",
+  	 left:"prev()", right: 150
+    }).on('select',login)
+      .appendTo(debugRow);
+
+/*
+var debugButton = new Button({
+  text: "timer",
+  alignment : "center",
+  left:"prev()", right: 0
+}).on('select',startTimer)
+.appendTo(myStack);
+*/
+
+
+var vehiclePicker = new Picker({
+//      textSource: 'VIN',
+      itemCount: 0,
+      itemText: null,
+      selectionIndex: 1  ,
+
+      //onItemSelect: handleVehicleSelection,
+      //items: [],
+      top: CONTROLS_HEIGHT * 1,
+      left:0, right: 0
+    }).appendTo(myStack)
+	  .on("select",handleVehicleSelection);
+;
+
+
+var myRow = new Composite({
   left : 0,
   right: 0,
-  }).appendTo(myStack);
+  top: CONTROLS_HEIGHT * 2
+}).appendTo(myStack);
 
 
-var endpointControl = new TextInput({
-  message: 'endpoint',
-  text: "hvac-settings",
-  alignment: "left"
+  var endpointControl = new TextInput({
+    message: 'endpoint',
+    text: "cockpit",
+    left:0, right: 250,
+    }).appendTo(myRow);
+
+  var endpointPicker = new Picker({
+      itemCount: ENDPOINTS.length,
+      itemText: (index) => ENDPOINTS[index].id,
+      selectionIndex: 1,
+    left:130, right: 100,
   }).appendTo(myRow);
 
-var endpointPicker = ItemPicker({
-  items: [
-    "cockpit",
-    "battery-status",
-    "hvac-status"
-    ],
-  onItemSelect : endpointHandler,
-  alignment: "centerX"
-}).appendTo(myRow);
 
-
-var versionPicker = ItemPicker({
-  items: ["v1","v2"],
-  alignment: "right"
-}).appendTo(myRow);
+  var versionPicker = new Picker({
+      itemCount: VERSIONS.length,
+      itemText: (index) => VERSIONS[index].id,
+      selectionIndex: 1 ,
+	  left:250, right: 0,
+  }).appendTo(myRow);
 
 
 
 var endpointButton = new Button({
  text: "Query",
- alignment : "centerX",
+// alignment : "centerX",
  left : 50,
  right: 50,
-}).onSelect(endpointStart)
+ top: CONTROLS_HEIGHT * 3
+}).on('select',endpointStart)
   .appendTo(myStack);
+
 
 const scrollView = new ScrollView({
    direction : "vertical",
-   layoutData: "stretchY",
-   //height : 100,
-   left : 0,
-   right : 0
+   background: '#f3f3f3',
+	left: 0, right: 0,
+    top: CONTROLS_HEIGHT * 4,
+	bottom: 0,
    })
-  .appendTo(myStack);
+  .appendTo(myStack/*ui.contentView*/);
 
-var output = new TextView({
-  alignment : "centerX",
-  left: 0,
-  right : 0
-}).appendTo(scrollView);
+
+    var output = new TextView({
+      alignment : "center",
+      text : "aswf dfg sfghswrt sfghsrt sdfg aergtsd aerg asf ",
+      left: 0,
+      right : 0
+    }).appendTo(scrollView);
+
 
 
 var pageMain = new Page({title: 'Main'});
@@ -254,9 +290,8 @@ pageConfig.append(myStackSettings);
 
 
 var actSettings = new Action ({
- // placement: "overflow",
   title: "Settings"
-}).onSelect(() =>
+}).on('select',() =>
 {
   console.log('Settings selected');
   pageConfig.append(myStackSettings);
@@ -264,10 +299,11 @@ var actSettings = new Action ({
 }
 );
 
-var navView = new NavigationView({layoutData: 'stretch', drawerActionVisible: true})
-  .append(actSettings)
+
+var navView = new NavigationView({/*layoutData: 'stretch',*/ drawerActionVisible: false})
   .append(pageMain)
-  .appendTo(contentView);
+  .append(actSettings)
+  .appendTo(ui.contentView);
 
 loadStoredParams();
 
@@ -277,9 +313,10 @@ console.log("Ready to start. Api keys:", GIGYA_API_KEY, KAMEREON_KEY);
 
 // ------------------------------ //
 
-function handleVehicleSelection({item, itemIndex}) {
-  output.text = "Vehicle selected: " + item.VIN;
-  VINindex = itemIndex;
+function handleVehicleSelection(a,b) {
+  output.text = "Vehicle selected: " + vehiclesItems[a.index].VIN;
+  console.log("Selezionato: ",a.index, vehiclesItems[a.index].VIN)
+  VINindex = a.index;
 }
 
 
@@ -305,14 +342,16 @@ function startTimer() {
 
 function aggiorna() {
 	console.log(counter++);
+	/*
 	if (counter>10) {
 		cordova.plugins.notification.local.schedule({
 		title: 'Time over',
 		text: 'Facile...',
 		foreground: true
 		});
+	    clearInterval(myTimer);
 	}
-    clearInterval(myTimer);
+	*/
 }
 
 
@@ -368,8 +407,8 @@ function login() {
                 LOG("send3c...", " ");
                 var JSONresponse =  JSON.parse(xhr3.response);
                 LOG("DONE 3", " ");
-                personId = JSONresponse.data.personId;;
-                output.text = "personId: " + personId;
+                personId = JSONresponse.data.personId;
+                output.text = "personId: " + personId + "\n";
                 var accountUrl = kamereonurl + "/commerce/v1/persons/" +
                   personId +
                   "?apikey=" + KAMEREON_KEY +
@@ -380,10 +419,10 @@ function login() {
                   if (xhr4.readyState === xhr4.DONE) {
                     LOG("send4c..."," ");
                     var JSONresponse =  JSON.parse(xhr4.response);
-                    LOG("DONE 4", " ");// xhr4.response);
+                    LOG("DONE 4", " ");
                     accountId = JSONresponse.accounts[0].accountId;
                     accountId2 = JSONresponse.accounts[1].accountId;
-                      output.text = "accountId: " + accountId + "\n" + accountId2;
+                      output.text += "accountId: " + accountId + "\n" + accountId2 + "\n";
                       var vehiclesListQueryUrl = kamereonurl + "/commerce/v1/accounts/" +
                         accountId2 +
                         "/vehicles" +
@@ -393,19 +432,22 @@ function login() {
                       xhr5.onreadystatechange = () => {
                         LOG("send5a..."," ");
                         if (xhr5.readyState === xhr5.DONE) {
-                          LOG("send5c..."," ");
+                          LOG("send5c...",xhr5);
                           var JSONresponse =  JSON.parse(xhr5.response);
-                          LOG("DONE 5:"," ");
+                          LOG("DONE 5", "Login completed.");
                           globalVehicles = JSONresponse.vehicleLinks;
-                          output.text = "";
+                          output.text += "Login completed.\n";
                           for (var vins=0; vins < JSONresponse.vehicleLinks.length; vins++) {
                             vehiclesItems.push({ "VIN" : JSONresponse.vehicleLinks[vins].vin});
                             output.text +=  JSONresponse.vehicleLinks[vins].vin + ",";
+                            console.log("Vehicle "+ vins + "= " + JSONresponse.vehicleLinks[vins].vin)
                           }
-                          vehiclePicker.items = vehiclesItems;
-                          vehiclePicker.selectionIndex = VINindex;
-                          output.text = "Ready to query vehicle " + JSONresponse.vehicleLinks[VINindex].vin;
-                          MY_VIN = JSONresponse.vehicleLinks[VINindex].vin;
+                          //vehiclePicker.items = vehiclesItems;
+                          //vehiclePicker.selectionIndex = VINindex;
+                          vehiclePicker.itemCount = vehiclesItems.length;
+                          vehiclePicker.itemText = testfun;
+                          output.text += "Ready to query vehicle " + JSONresponse.vehicleLinks[VINindex].vin;
+                          MY_VIN = JSONresponse.vehicleLinks[VINindex].vin;// + "\n";
                         }
                       };
                       xhr5.open('GET', vehiclesListQueryUrl);
@@ -448,24 +490,129 @@ function login() {
   xhr.send();
 }
 
+function testfun(index) {
+  console.log("PICKER:",index)
+  return vehiclesItems[index].VIN;
+
+}
 
 function endpointStart() {
   var testlink = kamereonurl + "/commerce/v1/accounts/" +
-			accountId +
-			"/kamereon/kca/car-adapter/" +
-      versionPicker.items[versionPicker.selectionIndex] +
+      accountId +
+      "/kamereon/kca/car-adapter/" +
+      VERSIONS[versionPicker.selectionIndex].id +
       "/cars/" +
       MY_VIN +
-			"/" +
+      "/" +
       endpointControl.text +
-			"?" +
-			"apikey=" + KAMEREON_KEY +
-			"&country=" + country;
+      "?" +
+      "apikey=" + KAMEREON_KEY +
+      "&country=" + country;
       LOG("Testing endpoint: ", testlink);
-  query(testlink, headers)
+  //loadData(testlink);
+
+  query(testlink);
 }
 
-function  query(url, headers) {
+
+function loadData(url) {
+  //url = 'http://ip-api.com/json';
+
+   fetchInit =     {
+      headers: {
+      	'Content-Type': 'application/json'
+      }
+    };
+
+  console.log("1:",fetchInit);
+
+  /*fetchInit = {
+    headers : {
+
+    }
+
+  };*/
+
+
+  for (var i=0; i<headers.length; i++) {
+    fetchInit.headers[headers[i].name] =  headers[i].value;
+  }
+
+  console.log("2:",fetchInit);
+
+  console.log("URL=", url);
+  console.log("HEADERS=",fetchInit);
+  fetch(url,fetchInit)
+    .then(response =>  checkStatus(response) && response.json())
+    .then(json => console.log("JSON:",json))
+    .catch(err => console.error("Niente, non va:",err, "\n------------------\n")); // Never forget the final catch!
+}
+
+function checkStatus(response) {
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+  }
+  return response;
+}
+
+
+
+function query1(url) {
+  const xhr6 = new XMLHttpRequest();
+  xhr6.onreadystatechange = () => {
+    LOG("send6a..."," ");
+    if (xhr6.readyState === xhr6.DONE) {
+      LOG("send6c..."," ");
+      //var JSONresponse =  JSON.parse(xhr6.response);
+      LOG("DONE 6", "Endpoint completed.");
+      output.text += "Endpoint completed.\n";
+      console.log("Finale:>>>" + xhr6.response + "<<<");
+      //output.text +=  JSONresponse;
+    }
+  };
+  xhr6.open('GET', url);
+
+  xhr6.setRequestHeader("x-gigya-id_token", JWT);
+  xhr6.setRequestHeader("apikey", KAMEREON_KEY);
+  xhr6.setRequestHeader("Content-type", "application/vnd.api+json");
+  xhr6.setRequestHeader("expiration", "87000");
+  xhr6.setRequestHeader("login_token", cookieValue);
+  LOG("send6...", " ");
+  xhr6.send();
+
+}
+
+function  query(url) {
+    LOG("RICEVUTO: " + url);
+    console.log("HEADERS:", headers);
+    // var JSONresponse = {};
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+    	LOG("send_a...", " ");
+      if (xhr.readyState === xhr.DONE) {
+        LOG("send_c...", " ");
+        LOG("DONE:" , xhr);
+        try {
+              output.text = xhr.response;
+              JSONresponse =  JSON.parse(xhr.response);
+        } catch(err) {
+                JSONresponse = {"data" : "error on url " + url};
+        }
+        return {"response_text" : xhr.response, "response_JSON" : JSONresponse}
+      }
+    };
+    xhr.open('GET', url);
+
+    for (var i=0; i<headers.length; i++) {
+       xhr.setRequestHeader(headers[i].name, headers[i].value);
+    }
+
+    LOG("send...", " ");
+    xhr.send();
+    LOG("send_b...", " ");
+}
+
+function  queryOld(url, headers) {
     LOG("RICEVUTO: " + url, headers);
     var JSONresponse = {};
     const xhr = new XMLHttpRequest();
@@ -473,12 +620,15 @@ function  query(url, headers) {
     LOG("send_a...", " ");
       if (xhr.readyState === xhr.DONE) {
         LOG("send_c...", " ");
-        LOG("DONE:" , xhr.response);
         try {
-              output.text = xhr.response;
-              JSONresponse =  JSON.parse(xhr.response);
+          LOG("DONE:" , ">>>>>\n" + xhr.response + "<<<<<<\n");
+          //output.text = xhr.response;
+          JSONresponse =  JSON.parse(xhr.response);
+          console.log(JSONresponse);
+          console.log("ok");
         } catch(err) {
-                JSONresponse = {"data" : "error on url " + url};
+          console.log("Mannaggia");
+          JSONresponse = {"data" : "error on url " + url};
         }
         return {"response_text" : xhr.response, "response_JSON" : JSONresponse}
       }
@@ -493,6 +643,7 @@ function  query(url, headers) {
     xhr.send();
     LOG("send_b...", " ");
 }
+
 
 
 function saveParams() {
@@ -565,7 +716,7 @@ function resetParams() {
       cancel : "No",
       neutral: "Cancel"
       }
-  }).onCloseOk(() => {
+  }).on("closeOk",() => {
       LOG("Reset authorization confirmed", "")
       gigyaurl = newData.servers.gigyaProd.target;
       GIGYA_API_KEY= newData.servers.gigyaProd.apikey;
@@ -585,7 +736,7 @@ function resetParams() {
 
       saveParams();
       })
-    .onCloseCancel(() => {
+    .on("closeCancel",() => {
       LOG("Cancel reset","");
       return;
       })
