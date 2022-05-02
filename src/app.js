@@ -1,3 +1,5 @@
+// 0.2.5 Playing with plugins and custom notifications
+// v.2 playground link: https://build.tabris.com/api/v1/me/playground/jumpjack
 // 0.2.4 Output working
 // 0.2.3 Working in 2.x (apart for output text)
 // 0.2.2 Playing with cordova and tabris 2.x
@@ -30,6 +32,18 @@ var checkInterval = 1; // Minutes between checks
 var loginDuration = 10; // To be implemented
 var simulatorInterval = 30; // Seconds between simulated increment of SoC (for debugging)
 var simulatedSoC = 0;
+
+
+if (cordova.plugins.notification) {
+  console.log("Notifications plugin detected, using Android notifications.");
+} else {
+  console.log("WARNING! Notifications plugin MISSING, using custom notifications.");
+  let path ='https://raw.githubusercontent.com/jumpjack/MyRenaultAndroid/main/beep-01a.mp3';
+  let onSuccess = () => console.log('Audio file "' + path  + '" loaded successfully');
+  let onError = err => console.log('Unable to play audio file "' + path  + '": ' + err.code + ' - ' + err.message);
+  console.log("Media file: ", path)
+  mymedia= new Media(path, onSuccess, onError);
+}
 
 const newData = {
 	"servers": {
@@ -67,6 +81,7 @@ drawer.append(
   </TextView>
 )
 */
+
 
 
 const CONTROLS_HEIGHT = 50;
@@ -196,14 +211,14 @@ var myStack = new Composite({
     }).on('select',login)
       .appendTo(debugRow);
 
-/*
+
 var debugButton = new Button({
   text: "timer",
   alignment : "center",
   left:"prev()", right: 0
 }).on('select',startTimer)
-.appendTo(myStack);
-*/
+.appendTo(debugRow);
+
 
 
 var vehiclePicker = new Picker({
@@ -342,17 +357,22 @@ function startTimer() {
 
 function aggiorna() {
 	console.log(counter++);
-	/*
+	
 	if (counter>10) {
-		cordova.plugins.notification.local.schedule({
-		title: 'Time over',
-		text: 'Facile...',
-		foreground: true
-		});
-	    clearInterval(myTimer);
+      if (cordova.plugins.notification) {
+          cordova.plugins.notification.local.schedule({
+          title: 'Time over',
+          text: 'Facile...',
+          foreground: true
+          });
+      } else {
+        mymedia.play();
+      }
+	  clearInterval(myTimer);
 	}
-	*/
+	
 }
+
 
 
 function LOG(mex1, mex2) {
@@ -742,3 +762,4 @@ function resetParams() {
       })
     .open()
 }
+      
